@@ -26,10 +26,10 @@ app.use(require('body-parser').urlencoded({
 }));
 
 // Create a route that will respond to a POST request
-app.get('/command', function(request, response) {
+app.get('/command', function(req, res) {
     // Get the command from the HTTP request and send it to the Minecraft
     // server process
-    var command = request.param('Body');
+    var command = req.param('Body');
     minecraftServerProcess.stdin.write(command+'\n');
 
     // buffer output for a quarter of a second, then reply to HTTP request
@@ -41,9 +41,9 @@ app.get('/command', function(request, response) {
     minecraftServerProcess.stdout.on('data', collector);
     setTimeout(function() {
         minecraftServerProcess.stdout.removeListener('data', collector);
-        response.send(buffer.join(''));
+        res.send(buffer.join(''));
     }, 250);
 });
 
 // Listen for incoming HTTP requests on port 3000
-app.listen(3000);
+app.listen(3056);
