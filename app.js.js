@@ -7,7 +7,7 @@ var minecraftServerProcess = spawn('java', [
     '-Xmx512M',
     '-Xms256M',
     '-jar',
-    'server.jar',
+    '../java/server.jar',
     'nogui'
 ]);
 
