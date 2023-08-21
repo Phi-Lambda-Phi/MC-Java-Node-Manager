@@ -5,7 +5,7 @@ var spawn = require('child_process').spawn;
 // invocation we used manually before
 var minecraftServerProcess = spawn('java', [
     '-Xms1024M',
-    '-Xms2048M',
+    '-Xmx2048M',
     '-jar',
     'server.jar',
     'nogui'
