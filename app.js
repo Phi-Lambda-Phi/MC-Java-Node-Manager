@@ -45,5 +45,5 @@ app.get('/command', function(req, res) {
     }, 250);
 });
 
-// Listen for incoming HTTP requests on port 3000
+// Listen for incoming HTTP requests on port 3056
 app.listen(3056);
