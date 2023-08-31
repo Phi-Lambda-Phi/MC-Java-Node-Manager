@@ -55,22 +55,5 @@ var options = {
 //	Any GoldSrc game	UDP	Yes
 //	Call of Duty		UDP	No
 
-client = new Rcon('localhost', '25575', 'philamb_rcon', options);
-
-client.on('auth', function() {
-	// You must wait until this event is fired before sending any commands,
-	// otherwise those commands will fail.
-	console.log("Authenticated");
-	console.log("Sending command: help")
-	client.send("help");
-}).on('response', function(str) {
-	console.log("Response: " + str);
-}).on('error', function(err) {
-	console.log("Error: " + err);
-}).on('end', function() {
-	console.log("Connection closed");
-	process.exit();
-});
-
 // Listen for incoming HTTP requests on port 3056
 app.listen(3056);
