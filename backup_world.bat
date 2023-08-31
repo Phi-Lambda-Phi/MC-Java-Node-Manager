@@ -6,12 +6,9 @@ cd C:\Users\Public\Documents\Minecraft Server\java
 
 :: 	Use HTTP GET to send save-all command to server
 curl -i -X GET http://mine.philamb.info/?command=/save-allcurl http://mine.philamb.info/?command=/save-all
-timeout /t 5
 ::	Stop server
-pm2 stop Minecraft-Java
-timeout /t 5
+call pm2 stop Minecraft-Java
 ::	Copy world files to backup with current date
-xcopy "philamb.info" "world.backups/%currDate%_%currTime%.philamb.info" /s/h/e/k/f/c/Y
-timeout /t 5
+xcopy "philamb.info" "world.backups/philamb.info/%currDate%_%currTime%.philamb.info" /h/e/k/f/c/Y
 ::	Restart the server
-pm2 start Minecraft-Java
+call pm2 start Minecraft-Java
