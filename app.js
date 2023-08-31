@@ -26,10 +26,10 @@ app.use(require('body-parser').urlencoded({
 }));
 
 // Create a route that will respond to a POST request
-app.get('/command', function(req, res) {
+app.get('/', function(req, res) {
     // Get the command from the HTTP request and send it to the Minecraft
     // server process
-    var command = req.param('Body');
+    var command = req.query.command;
     minecraftServerProcess.stdin.write(command+'\n');
 
     // buffer output for a quarter of a second, then reply to HTTP request
