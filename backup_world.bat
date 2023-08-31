@@ -9,6 +9,6 @@ curl -i -X GET http://mine.philamb.info/?command=/save-allcurl http://mine.phila
 ::	Stop server
 call pm2 stop Minecraft-Java
 ::	Copy world files to backup with current date
-xcopy "philamb.info" "world.backups/philamb.info/%currDate%_%currTime%.philamb.info" /h/e/k/f/c/Y
+xcopy "philamb.info" "world.backups/philamb.info/%currDate%_%currTime%.philamb.info" /h/e/i/Y
 ::	Restart the server
 call pm2 start Minecraft-Java
