@@ -15,21 +15,13 @@ require('dotenv').config();
 var fetch = require('../fetch');
 var { GRAPH_ME_ENDPOINT } = require('../authConfig');
 
-// custom middleware to check auth state
-function isAuthenticated(req, res, next) {
-    if (!req.session.isAuthenticated) {
-        return res.redirect('/auth/signin'); // redirect to sign-in route
-    }
-
-    next();
-};
-
 require('dotenv').config({ path: '.env.dev' });
 
 /* GET cover page. */
 router.get('/', function(req, res, next) {
-	res.render('base/mixins/cover', { env: req.session.env,
-		title: 'Phi Lambda Phi', subtitle: 'Minecraft Server Administration - JAVA'});
+	res.render('base/mixins/cover', { 
+		title: 'Phi Lambda Phi', 
+		subtitle: 'Minecraft Server Administration - JAVA'});
 });
 
 /* Redirect to login page. */
@@ -46,7 +38,6 @@ router.get('/home', function(req, res, next) {
 		content = [{parallax: {rem:'10', url:'/res/plp/graphics/philamb_flag.png'}, hero : {title:'Server Commands', content:subcontent}}];
 		
 		res.render('pages/basicText', { 
-			env: req.session.env, 
 			title:'Commands', 
 			page:{
 				content: content
