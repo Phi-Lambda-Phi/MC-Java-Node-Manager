@@ -46,8 +46,11 @@ app.use(cors({
 
 require("dotenv").config({ path: __dirname + `/.env.dev` }); 
 
+// Require Node.js standard library function to spawn a child process
 var spawn = require('child_process').spawn;
 
+// Create a child process for the Minecraft server using the same java process
+// invocation we used manually before
 var minecraftServerProcess = spawn('java', [
     '-Xms1024M',
     '-Xmx2048M',
@@ -56,21 +59,30 @@ var minecraftServerProcess = spawn('java', [
     'nogui'
 ]);
 
+// Listen for events coming from the minecraft server process - in this case,
+// just log out messages coming from the server
 function log(data) {
     process.stdout.write(data.toString());
 }
 minecraftServerProcess.stdout.on('data', log);
 minecraftServerProcess.stderr.on('data', log);
 
+// Create an express web app that can parse HTTP POST requests
 var app = require('express')();
 app.use(require('body-parser').urlencoded({
     extended:false
 }));
 
+//	Set an endpoint for the root directory
+app.use(`/`,require(`./routes/index`));
+// Create a route that will respond to a POST request
 app.get('/java', function(req, res) {
+    // Get the command from the HTTP request and send it to the Minecraft
+    // server process
     var command = req.query.command;
     minecraftServerProcess.stdin.write(command+'\n');
 
+    // buffer output for a quarter of a second, then reply to HTTP request
     var buffer = [];
     var collector = function(data) {
         data = data.toString();
@@ -82,7 +94,6 @@ app.get('/java', function(req, res) {
         res.send(buffer.join(''));
     }, 250);
 });
-app.use(`/`,require(`./routes/index`));
 
 var options = {
   tcp: false,       // false for UDP, true for TCP (default true)
@@ -101,9 +112,11 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  // render the error page
   res.status(err.status || 500);
   res.render('base/error');
 });
