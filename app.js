@@ -47,9 +47,6 @@ app.use(cors({
 
 require("dotenv").config({ path: __dirname + `/.env.dev` }); 
 
-//	Set an endpoint for the root directory
-app.use(`/`,require(`./routes/index`));
-
 // Require Node.js standard library function to spawn a child process
 var spawn = require('child_process').spawn;
 
@@ -77,6 +74,8 @@ app.use(require('body-parser').urlencoded({
     extended:false
 }));
 
+//	Set an endpoint for the root directory
+app.use(`/`,require(`./routes/index`));
 // Create a route that will respond to a POST request
 app.get('/java', function(req, res) {
     // Get the command from the HTTP request and send it to the Minecraft
