@@ -45,6 +45,26 @@ app.get('/java', function(req, res) {
     }, 250);
 });
 
+// Create a route that will respond to a POST request
+app.post('/java', function(req, res) {
+    // Get the command from the HTTP request and send it to the Minecraft
+    // server process
+    var command = req.query.command;
+    minecraftServerProcess.stdin.write(command+'\n');
+
+    // buffer output for a quarter of a second, then reply to HTTP request
+    var buffer = [];
+    var collector = function(data) {
+        data = data.toString();
+        buffer.push(data.split(']: ')[1]);
+    };
+    minecraftServerProcess.stdout.on('data', collector);
+    setTimeout(function() {
+        minecraftServerProcess.stdout.removeListener('data', collector);
+        res.send(buffer.join(''));
+    }, 250);
+});
+
 var options = {
   tcp: false,       // false for UDP, true for TCP (default true)
 };
