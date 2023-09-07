@@ -1,55 +1,3 @@
-/*	app.js
-
-	For Indian Hills Community College
-	Parking On Hills, https://parking.indianhils.edu
-	by Blaine Harper
-
-	PURPOSE: Root application for parking registartion UI and API
-*/
-
-const multer = require("multer");
-const fs = require('fs');
-const createError = require('http-errors');
-const moment = require('moment');
-const express = require('express');
-const session = require('express-session');
-const path = require('path');
-const cluster = require('cluster');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const msal = require('@azure/msal-node');
-const axios = require('axios');
-var favicon =	require('serve-favicon');
-var cors = require('cors');
-
-var protocols = ['https://','http://'];
-var origins = [];
-
-var app = express();
-
-DEBUG = 	true;
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
-
-// CORS
-app.use(cors({
-    origin: '*'
-}));
-
-require("dotenv").config({ path: __dirname + `/.env.dev` }); 
-
-//	Set an endpoint for the root directory
-app.use(`/`,require(`./routes/index`));
-
 // Require Node.js standard library function to spawn a child process
 var spawn = require('child_process').spawn;
 
@@ -78,7 +26,7 @@ app.use(require('body-parser').urlencoded({
 }));
 
 // Create a route that will respond to a POST request
-app.get('/java', function(req, res) {
+app.get('/', function(req, res) {
     // Get the command from the HTTP request and send it to the Minecraft
     // server process
     var command = req.query.command;
@@ -108,4 +56,4 @@ var options = {
 //	Call of Duty		UDP	No
 
 // Listen for incoming HTTP requests on port 3056
-app.listen(process.env.PORT);
+app.listen(3056);
