@@ -47,6 +47,20 @@ app.use(cors({
 
 require("dotenv").config({ path: __dirname + `/.env.dev` }); 
 
+/**
+ * Using express-session middleware for persistent user session. Be sure to
+ * familiarize yourself with available options. Visit: https://www.npmjs.com/package/express-session
+ */
+app.use(session({
+    secret: 'your_secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: false, // set this to true on production
+    }
+}));
+
 // Require Node.js standard library function to spawn a child process
 var spawn = require('child_process').spawn;
 
@@ -106,5 +120,33 @@ var options = {
 //	Any GoldSrc game	UDP	Yes
 //	Call of Duty		UDP	No
 
-// Listen for incoming HTTP requests on port 3056
-app.listen(process.env.PORT);
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('base/error');
+});
+
+// Failsafe App.js relaunch
+if (cluster.isPrimary) {
+	cluster.fork();
+	
+	cluster.on('exit', function(worker, code, signal) {
+		cluster.fork();
+	});
+} else {
+	app.listen(process.env.PORT, () => {
+		console.log(`App listening on port ${process.env.PORT}`)
+	});
+}
+
+module.exports = app;
