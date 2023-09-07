@@ -14,7 +14,6 @@ const moment = require('moment');
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const cluster = require('cluster');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const msal = require('@azure/msal-node');
@@ -122,17 +121,8 @@ app.use(function(err, req, res, next) {
   res.render('base/error');
 });
 
-// Failsafe App.js relaunch
-if (cluster.isPrimary) {
-	cluster.fork();
-	
-	cluster.on('exit', function(worker, code, signal) {
-		cluster.fork();
-	});
-} else {
-	app.listen(process.env.PORT, () => {
-		console.log(`App listening on port ${process.env.PORT}`)
-	});
-}
+app.listen(process.env.PORT, () => {
+	console.log(`App listening on port ${process.env.PORT}`)
+});
 
 module.exports = app;
