@@ -47,6 +47,20 @@ app.use(cors({
 
 require("dotenv").config({ path: __dirname + `/.env.dev` }); 
 
+/**
+ * Using express-session middleware for persistent user session. Be sure to
+ * familiarize yourself with available options. Visit: https://www.npmjs.com/package/express-session
+ */
+app.use(session({
+    secret: 'your_secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: false, // set this to true on production
+    }
+}));
+
 // Require Node.js standard library function to spawn a child process
 var spawn = require('child_process').spawn;
 
